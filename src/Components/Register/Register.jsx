@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import auth from '../../Firebase/firebase.config';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -90,6 +91,7 @@ const Register = () => {
           {
             registerError && <p>{registerError}</p>
           }
+          <p>Already have an account? Please <Link className='text-blue-600 font-semibold' to="/login">Log in</Link></p>
         </form>
         <button onClick={() => setShowPassword(!showPassword)}>{!showPassword ? <FaEye /> : <FaEyeSlash />} </button>
       </div>

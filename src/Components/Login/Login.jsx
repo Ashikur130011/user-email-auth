@@ -1,6 +1,7 @@
 import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 import auth from '../../Firebase/firebase.config';
 import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const emailRef = useRef(null)
@@ -72,6 +73,7 @@ const Login = () => {
                             {
                                loginError && <p>{loginError}</p>
                             }
+                            <p>New to this website? Please <Link className='text-blue-600 font-semibold' to="/register">Register</Link></p>
                             <div className="form-control mt-6">
                                 <button className="btn btn-primary">Login</button>
                             </div>

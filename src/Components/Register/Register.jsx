@@ -1,30 +1,35 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import auth from '../../Firebase/firebase.config';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [user, setUser] = useState([])
+    const [registerError, setError] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Submitted",email,password)
-
-        createUserWithEmailAndPassword(auth, email, password)
+        setError('')
+        if (password !== confirmPassword) {
+            alert("Passwords do not match!");
+            return;
+          }
+          createUserWithEmailAndPassword(auth, email, password)
             .then(result => {
-                const user = result.user
-                setUser(user)
+                setUser(result)
+                alert(`Registered with Email: ${email}`);
             })
             .catch(error => {
+                setError(error.message)
                 console.log(error.message)
             })
-        if (password !== confirmPassword) {
-          alert("Passwords do not match!");
-          return;
-        }
-        alert(`Registered with Email: ${email}`);
+          setEmail('')
+          setPassword('')
+          setConfirmPassword('')
       };
 
 
@@ -53,11 +58,12 @@ const Register = () => {
             <input 
               className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
               id="password" 
-              type="password" 
+              type={showPassword ? 'text' : "password"} 
               placeholder="Enter your password" 
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
             />
+            
           </div>
           <div>
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
@@ -72,6 +78,7 @@ const Register = () => {
               onChange={(e) => setConfirmPassword(e.target.value)} 
             />
           </div>
+          
           <div className="flex items-center justify-between">
             <button 
               className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transform transition-transform hover:scale-105" 
@@ -80,7 +87,11 @@ const Register = () => {
               Register
             </button>
           </div>
+          {
+            registerError && <p>{registerError}</p>
+          }
         </form>
+        <button onClick={() => setShowPassword(!showPassword)}>{!showPassword ? <FaEye /> : <FaEyeSlash />} </button>
       </div>
     </div>
     );
